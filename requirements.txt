@@ -7,8 +7,6 @@ opencv-python
 h5py
 imgaug
 numpy==1.17.0
-tensorflow==1.15.2
-keras==2.1.0
 gunicorn==20.0.4
 Flask==1.1.2
 IPython[all]
