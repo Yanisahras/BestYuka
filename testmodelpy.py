@@ -160,9 +160,10 @@ def mainmodel(imf_from_server):
 
 	model.load_weights(model_path, by_name=True)
 
-
-	result = model.detect([im])
-
+	try:
+		result = model.detect([im])
+	except:
+		return False
 
 	dict_of_information = {
 		'bread-white':{
@@ -280,19 +281,11 @@ def mainmodel(imf_from_server):
 	r = result[0]
 	print(r)
 
-	if  not r['class_ids']:
-		print("viiiiiiiiiiiiiiideeeeeeeeeeeeeeeeeeeeeeeee---------------------------------------------------666666>")
-		return {
-		 'label' : "null",
-		  'details' :{
-		'calories':'1000g',
-		'lipide':'1000g',
-		'proteine':'2000k'
-		}
-		}
+	if  len(r['class_ids']) == 0 :
+		return False
 	else:
 
-		pred_score = list(result[0]['scores'])
+		#pred_score = list(result[0]['scores'])
 		#print(pred_score)
 		# visualize.display_instances(im, r['rois'], r['masks'], r['class_ids'], 
 		#                             class_names, r['scores'])
@@ -301,14 +294,19 @@ def mainmodel(imf_from_server):
 		#print(type(imtest))
 
 		#pred_class = [class_names[i] for i in list(r['class_ids'])]
-		
-		pred_class =  [ r ['class_ids'][0] ]
-		print(pred_class[0])
+		pred_class = []
 
-		print("-------------------->>>>")
+		for x in r['class_ids'] : 
+			pred_class.append(class_names[x])
+
+		#pred_class =  [ r ['class_ids'][0] ]
+		#print(pred_class[0])
+
 
 #		print(dict_of_information[pred_class[0]])
-		resultjson = '{"label" : "'+str(class_names[pred_class[0]]) +'" ,"details" :{"calories":"12g","lipide":"13g","proteine":"200k" } }'
+		#resultjson = {"label" : str(class_names[pred_class[0]])  ,"details" :{"calories":"265","lipide":"3.2","glucide":"49","proteine":"9" } }
+		resultjson = {"labels" : pred_class }
+
 		return resultjson
 
 
@@ -322,11 +320,17 @@ def hello():
         base64data = request.form['image']
         resultat =  mainmodel(base64data)
         print(type(resultat))
-        #return jsonify(resultat)
-        return jsonify({"data":resultat}) # Response(json.dumps(resultat), status=200, mimetype='application/json')
+        print(resultat)
+        #return jsonify(resultat
+        if resultat :
+        	return jsonify({"data": resultat}) 
+        else :
+        	return jsonify({"data": "not found"})
+        # Response(json.dumps(resultat), status=200, mimetype='application/json')
           #flask.make_response(jsonify(resultat),200)
     except:
-        print('erreur serveuuuuuur <------------------>')
+        print(resultat)
+        print('erreur serveuuuuuur <-------------->')
 
 if __name__ == '__main__':
     app.run(debug=True)
