@@ -1,1 +1,1 @@
-export const baseURL = 'https://yukafoodapi.herokuapp.com';
+export const baseURL = 'http://yukafoodapi.herokuapp.com';

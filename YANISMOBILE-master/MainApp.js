@@ -7,10 +7,12 @@ import AuthStack from './AuthStack';
 import AsyncStorage from '@react-native-community/async-storage';
 
 const MainApp = () => {
-  const {user, login, loading, setLoading} = useContext(AppContext);
+  const {user, login, setUser} = useContext(AppContext);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     AsyncStorage.getItem('user').then(userString => {
       if (userString) {
+        setUser(JSON.parse(userString));
       }
       setLoading(false);
     }, []);

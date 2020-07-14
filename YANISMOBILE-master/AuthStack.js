@@ -13,9 +13,10 @@ import {createStackNavigator} from '@react-navigation/stack';
 const Stack = createStackNavigator();
 
 function LoginScreen({navigation}) {
-  const {login, error, loading} = useContext(AppContext);
+  const {login, error} = useContext(AppContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, changeLoading] = useState(false);
 
   if (loading) {
     return (
@@ -26,6 +27,7 @@ function LoginScreen({navigation}) {
           justifyContent: 'center',
           alignItems: 'center',
         }}>
+        <Text>connexion en cours</Text>
         <ActivityIndicator size="large" />
       </View>
     );
@@ -60,7 +62,13 @@ function LoginScreen({navigation}) {
         placeholder="Password"
         secureTextEntry={true}
       />
-      <Button title="Connexion" onPress={() => login(email, password)} />
+      <Button
+        title="Connexion"
+        onPress={() => {
+          changeLoading(true);
+          login(email, password, changeLoading, loading);
+        }}
+      />
       <Button
         title="Inscription"
         onPress={() => navigation.navigate('Register')}
@@ -78,6 +86,22 @@ function RegisterScreen({navigation}) {
   const [taille, setTaille] = useState('');
   const [poids, setPoids] = useState('');
   const [age, setAge] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  if (loading) {
+    return (
+      <View
+        style={{
+          display: 'flex',
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <Text>Traitement en cours</Text>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
 
   return (
     <ScrollView>
@@ -185,9 +209,20 @@ function RegisterScreen({navigation}) {
         />
         <Button
           title="Confirmer"
-          onPress={() =>
-            register(email, password, repeatPassword, name, poids, taille, age)
-          }
+          onPress={() => {
+            setLoading(true);
+            register(
+              email,
+              password,
+              repeatPassword,
+              name,
+              poids,
+              taille,
+              age,
+              loading,
+              setLoading,
+            );
+          }}
         />
         <Button
           title="Connexion"

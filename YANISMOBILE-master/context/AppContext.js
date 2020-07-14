@@ -19,14 +19,21 @@ const AppContextProvider = ({children}) => {
       value={{
         isLoged,
         user,
-        login: (email, password) => {
-          setLoading(true);
+        login: (email, password, changeLoading, loading) => {
           axios
-            .post('/api/sanctum/token', {
-              email,
-              password,
-              device_name: 'mobile',
-            })
+            .post(
+              '/api/sanctum/token',
+              {
+                email,
+                password,
+                device_name: 'mobile',
+              },
+              {
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+              },
+            )
             .then(response => {
               const userResponse = {
                 name: response.data.user.name,
@@ -39,15 +46,16 @@ const AppContextProvider = ({children}) => {
               setUser(userResponse);
               setLoged(true);
               AsyncStorage.setItem('user', JSON.stringify(userResponse));
-              setLoading(false);
+              changeLoading(false);
             })
             .catch(error => {
+              console.log('error', error);
               const key = Object.keys(error.response.data.errors)[0];
               setError(error.response.data.errors[key][0]);
-              setLoading(false);
+              changeLoading(false);
             });
         },
-        logout: () => {
+        logout: (loading, setLoading) => {
           setLoading(true);
 
           axios.defaults.headers.common['Authorization'] = `Bearer ${
@@ -57,9 +65,10 @@ const AppContextProvider = ({children}) => {
           axios
             .post('/api/logout')
             .then(response => {
-              setUser(null);
-              AsyncStorage.removeItem('user');
-              setLoading(false);
+              AsyncStorage.removeItem('user').then(() => {
+                setUser(null);
+                setLoading(false);
+              });
             })
             .catch(error => {
               console.log(error);
@@ -74,6 +83,8 @@ const AppContextProvider = ({children}) => {
           poids,
           taille,
           age,
+          loading,
+          setLoading,
         ) => {
           axios
             .post('/api/register', {
@@ -99,8 +110,10 @@ const AppContextProvider = ({children}) => {
               setUser(userResponse);
               setLoged(true);
               AsyncStorage.setItem('user', JSON.stringify(userResponse));
+              setLoading(false);
             })
             .catch(error => {
+              setLoading(false);
               const key = Object.keys(error.response.data.errors)[0];
               setRegisterError(error.response.data.errors[key][0]);
             });
@@ -109,6 +122,7 @@ const AppContextProvider = ({children}) => {
         setLoading,
         error,
         registerError,
+        setUser,
       }}>
       {children}
     </AppContext.Provider>

@@ -218,66 +218,7 @@ def mainmodel(imf_from_server):
 		}
 	}
 
-	class_names = [
-		'BG', 'water','pizza-margherita-baked','broccoli',
-	 'salad-leaf-salad-green',
-	 'zucchini',
-	 'egg',
-	 'butter',
-	 'bread-white',
-	 'apple',
-	 'dark-chocolate',
-	 'white-coffee-with-caffeine',
-	 'sweet-pepper',
-	 'mixed-salad-chopped-without-sauce',
-	 'tomato-sauce',
-	 'bread-wholemeal',
-	 'coffee-with-caffeine',
-	 'cucumber',
-	 'cheese',
-	 'pasta-spaghetti',
-	 'rice',
-	 'salmon',
-	 'carrot',
-	 'onion',
-	 'mixed-vegetables',
-	 'espresso-with-caffeine',
-	 'banana',
-	 'strawberries',
-	 'mayonnaise',
-	 'almonds',
-	 'wine-white',
-	 'hard-cheese',
-	 'ham-raw',
-	 'tomato',
-	 'french-beans',
-	 'mandarine',
-	 'wine-red',
-	 'potatoes-steamed',
-	 'croissant',
-	 'salami',
-	 'boisson-au-glucose-50g',
-	 'biscuits',
-	 'corn',
-	 'leaf-spinach',
-	 'jam',
-	 'tea-green',
-	 'chips-french-fries',
-	 'parmesan',
-	 'beer',
-	 'avocado',
-	 'bread-french-white-flour',
-	 'chicken',
-	 'soft-cheese',
-	 'tea',
-	 'sauce-savoury',
-	 'honey',
-	 'bread-whole-wheat',
-	 'bread-sourdough',
-	 'gruyere',
-	 'pickle',
-	 'mixed-nuts',
-	 'water-mineral']
+	class_names = ["BG","eau", "pizza-margherita", "brocoli", "salade-feuille-salade-verte", "courgettes", "oeuf", "beurre", "blanc du pain", "pomme", "chocolat noir", "café blanc avec caféine", "poivre doux", "salade mixte hachée sans sauce", "sauce tomate", "farine du pain", "café avec caféine", "concombre", "fromage", "pâtes-spaghetti", "riz", "saumon", "carotte", "oignon", "légumes mélangés", "espresso-avec-caféine", "banane", "fraises", "mayonnaise", "amandes", "blanc de vin", "fromage à pâte dure", "jambon cru", "tomate", "haricots français", "mandarine", "rouge-vin", "pommes de terre à la vapeur", "salami", "boisson-au-glucose-50g", "biscuits", "maïs", "épinards à feuilles", "jam", "thé-vert", "frites-françaises", "parmesan", "bière", "avocat", "pain-français-farine blanche", "poulet", "fromage à pâte molle", "thé", "sauce-savoureuse", "miel", "pain-blé", "le pain et le le levain", "gruyère", "mixed-nuts", "eau-minérale"]
 	r = result[0]
 	print(r)
 
@@ -315,11 +256,11 @@ app = Flask(__name__)
 @app.route('/', methods=['POST'])
 #@app.route("/")
 def hello():
-
+#
     try:
         base64data = request.form['image']
         resultat =  mainmodel(base64data)
-        print(type(resultat))
+        print(type(resultat)) 
         print(resultat)
         #return jsonify(resultat
         if resultat :
@@ -327,7 +268,7 @@ def hello():
         else :
         	return jsonify({"data": "not found"})
         # Response(json.dumps(resultat), status=200, mimetype='application/json')
-          #flask.make_response(jsonify(resultat),200)
+    #      #flask.make_response(jsonify(resultat),200)
     except:
         print(resultat)
         print('erreur serveuuuuuur <-------------->')
