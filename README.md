@@ -1,7 +1,7 @@
-# Application YukaBest 
+## Application YukaBest 
 
-# Auteur Yanis AHRAS
-# Meriem Nadège Souici
+##### Auteur Yanis AHRAS
+##### Meriem Nadège Souici
 
 # Fonctionnalités :
 
